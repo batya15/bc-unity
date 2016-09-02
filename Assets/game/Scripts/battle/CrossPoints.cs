@@ -13,10 +13,10 @@ namespace bc.battle
 					return new Vector2 (x + 0.5f, -y - 0.5f);
 				}
 			}
-			public Point UpCross;
-			public Point DownCross;
-			public Point LeftCross;
-			public Point RightCross;	
+			public Point UpCross = null;
+			public Point DownCross = null;
+			public Point LeftCross = null;
+			public Point RightCross = null;	
 		}
 
 		public Point[,] _points;
@@ -30,8 +30,31 @@ namespace bc.battle
 						y = i
 					};
 				}
-			}	
-		}
+			}
+
+            for (int x = 0; x < _points.GetLength(0); x++)
+            {
+                for (int y = 0; y < _points.GetLength(1); y++)
+                {
+                    if (y + 1 < _points.GetLength(1)) {
+                        _points[x, y].DownCross = _points[x, y + 1];
+                    }
+                    if (y - 1 >= 0)
+                    {
+                        _points[x, y].UpCross = _points[x, y - 1];
+                    }
+                    if (x - 1 >= 0)
+                    {
+                        _points[x, y].LeftCross = _points[x - 1, y];
+                    }
+                    if (x + 1 < _points.GetLength(0))
+                    {
+                        _points[x, y].RightCross = _points[x + 1, y];
+                    }
+                }
+            }
+
+        }
 
 		public Point this[int x, int y]
 		{

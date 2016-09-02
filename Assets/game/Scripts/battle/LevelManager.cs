@@ -27,6 +27,9 @@ namespace bc.battle {
 
 			CrossPoints = new CrossPoints (map);
 
+            GameObject tank = factory.GetTank();
+            tank.transform.SetParent(transform);
+            tank.transform.position = CrossPoints._points[3, 2].position;
         }
 
 	}

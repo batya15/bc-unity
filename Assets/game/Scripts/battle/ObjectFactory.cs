@@ -7,6 +7,9 @@ namespace bc.battle {
         [SerializeField]
         GameObject[] cells = null;
 
+        [SerializeField]
+        GameObject[] tanks = null;
+
         public GameObject GetCell(CellType type) {
             GameObject result = null;
             foreach (GameObject cell in cells) {
@@ -16,6 +19,10 @@ namespace bc.battle {
                 }
             }
             return Instantiate(result);
+        }
+
+         public GameObject GetTank() {
+            return Instantiate(tanks[0]);
         }
 
     }
