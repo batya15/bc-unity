@@ -15,6 +15,7 @@ namespace bc.battle {
 
         void Start() {
             MapDescriptor map = new MapDescriptor("1");
+			Cell[,] gridState = new Cell[map.rows[0].cells.Length, map.rows.Length];
 
 			for (int y = 0; y < map.rows.Length; y++) {
                 for (int x = 0; x < map.rows[y].cells.Length; x++) {
@@ -22,10 +23,11 @@ namespace bc.battle {
                     cell.name = y + " - " + x;
                     cell.transform.SetParent(transform);
                     cell.transform.position = new Vector2(x * 1.0f, y * -1.0f);
+					gridState [x, y] = cell.GetComponent<Cell> ();
 				}
             }
 
-			CrossPoints = new CrossPoints (map);
+			CrossPoints = new CrossPoints (map, gridState);
 
             GameObject tank = factory.GetTank();
             tank.transform.SetParent(transform);
