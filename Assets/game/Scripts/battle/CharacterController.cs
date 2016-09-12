@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using bc.battle;
 
 public class CharacterController : MonoBehaviour {
 
@@ -11,12 +12,24 @@ public class CharacterController : MonoBehaviour {
 		RIGHT = 4
 	}
 
+    public CrossPoints.Point point;
+
 	public float speed = 1.0f;
 	float delta = 0;
 	Direction direction = Direction.IDLE;
 	Direction lastDirectionType = Direction.IDLE;
 
-	void Update () {
+    void Start() {
+        transform.position = point.position;
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawSphere(point.position, 0.2f);
+    }
+
+        void Update () {
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			direction = Direction.UP;
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
@@ -29,32 +42,63 @@ public class CharacterController : MonoBehaviour {
 			direction = Direction.IDLE;
 		}
 
-
-		if (direction != lastDirectionType) {
-			delta = 0;
-		}
-		if (direction != Direction.IDLE) {
-			float d = Time.deltaTime * speed; 
-			delta += d;
-			Vector2 newPos = transform.position;
+        if (direction != Direction.IDLE) {
+            if (direction != lastDirectionType)
+            {
+                delta = 0;
+            }
+            lastDirectionType = direction;
+            float d = Time.deltaTime * speed; 
+			delta = delta + d;
+            Vector2 newPos = point.position;
 			switch (direction) {
 			case Direction.DOWN:
-				newPos.Set (newPos.x, newPos.y - d);
-				break;
+                    if (point.DownCross != null) {
+                        newPos += new Vector2(0, -delta);
+                    } else {
+                        delta = 0;
+                    }
+                    break;
 			case Direction.UP:
-				newPos.Set (newPos.x, newPos.y + d);
-				break;
+                    if (point.UpCross != null) {
+                        newPos += new Vector2(0, delta);
+                    } else {
+                        delta = 0;
+                    }
+                    break;
 			case Direction.RIGHT:
-				newPos.Set (newPos.x + d, newPos.y);
-				break;
+                    if (point.RightCross != null) {
+                        newPos += new Vector2(delta, 0);
+                    } else {
+                        delta = 0;
+                    }
+                    break;
 			case Direction.LEFT:
-				newPos.Set (newPos.x - d, newPos.y);
+                    if (point.LeftCross != null) {
+                        newPos += new Vector2(-delta, 0);
+                    } else {
+                        delta = 0;
+                    }			
 				break;
 			}
-
 			if (delta >= 1.0f) {
-				Debug.Log ("GO TO");
-			}
+                switch (direction)
+                {
+                    case Direction.DOWN:
+                        point = point.DownCross;
+                        break;
+                    case Direction.UP:
+                        point = point.UpCross;
+                        break;
+                    case Direction.RIGHT:
+                        point = point.RightCross;
+                        break;
+                    case Direction.LEFT:
+                        point = point.LeftCross;
+                        break;
+                }
+                delta -= 1.0f;
+            }
 			transform.position = newPos;
 		}
     }

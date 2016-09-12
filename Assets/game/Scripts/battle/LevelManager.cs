@@ -31,7 +31,7 @@ namespace bc.battle {
 
             GameObject tank = factory.GetTank();
             tank.transform.SetParent(transform);
-            tank.transform.position = CrossPoints._points[3, 2].position;
+            tank.GetComponent<CharacterController>().point = CrossPoints._points[3, 2];
         }
 
 	}
