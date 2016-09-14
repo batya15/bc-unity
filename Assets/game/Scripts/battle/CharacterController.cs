@@ -62,14 +62,8 @@ public class CharacterController : MonoBehaviour {
             {
                 delta = 0;
             }
-			striteTime += Time.deltaTime;
-			Debug.Log (striteTime);
-			if (striteTime > 0.5f) {
-				striteTime = 0;
-				sp.sprite = up [0];
-			} else {
-				sp.sprite = up [1];
-			}
+			striteTime += Time.fixedDeltaTime * 20 * speed;
+            int s = Mathf.Cos(striteTime) > 0 ? 0 : 1;
 
             lastDirectionType = direction;
             float d = Time.deltaTime * speed; 
@@ -77,6 +71,7 @@ public class CharacterController : MonoBehaviour {
 			Vector2 newPos = point.position;
 			switch (direction) {
 			case Direction.DOWN:
+                    sp.sprite = down[s];
                     if (point.DownCross != null) {
                         newPos += new Vector2(0, -delta);
                     } else {
@@ -84,6 +79,7 @@ public class CharacterController : MonoBehaviour {
                     }
                     break;
 			case Direction.UP:
+                    sp.sprite = up[s];
                     if (point.UpCross != null) {
                         newPos += new Vector2(0, delta);
                     } else {
@@ -91,6 +87,7 @@ public class CharacterController : MonoBehaviour {
                     }
                     break;
 			case Direction.RIGHT:
+                    sp.sprite = right[s];
                     if (point.RightCross != null) {
                         newPos += new Vector2(delta, 0);
                     } else {
@@ -98,6 +95,7 @@ public class CharacterController : MonoBehaviour {
                     }
                     break;
 			case Direction.LEFT:
+                    sp.sprite = left[s];
                     if (point.LeftCross != null) {
                         newPos += new Vector2(-delta, 0);
                     } else {
