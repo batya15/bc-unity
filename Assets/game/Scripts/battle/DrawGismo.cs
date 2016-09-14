@@ -5,7 +5,7 @@ using bc.battle;
 
 public class DrawGismo : MonoBehaviour {
 
-	LevelManager manager;
+	LevelManager manager = null;
 	[SerializeField]
 	int X = 2;
 	[SerializeField]
@@ -17,7 +17,9 @@ public class DrawGismo : MonoBehaviour {
 
 	public void OnDrawGizmos()
 	{
-		
+        if (manager == null) {
+            return;
+        }
 		Gizmos.color = Color.red;
 		for (int x = 0; x < manager.CrossPoints._points.GetLength(0); x++) {
 			for (int y = 0; y < manager.CrossPoints._points.GetLength (1); y++) {

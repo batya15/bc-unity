@@ -4,6 +4,15 @@ using bc.battle;
 
 public class CharacterController : MonoBehaviour {
 
+	[SerializeField]
+	Sprite[] up;
+	[SerializeField]
+	Sprite[] down;
+	[SerializeField]
+	Sprite[] left;
+	[SerializeField]
+	Sprite[] right;
+
 	public enum Direction {
 		IDLE = 0,
 		UP = 1,
@@ -16,8 +25,14 @@ public class CharacterController : MonoBehaviour {
 
 	public float speed = 1.0f;
 	float delta = 0;
+	float striteTime = 0;
 	Direction direction = Direction.IDLE;
 	Direction lastDirectionType = Direction.IDLE;
+	SpriteRenderer sp;
+
+	void Awake () {
+		sp = GetComponent<SpriteRenderer> ();
+	}
 
     void Start() {
         transform.position = point.position;
@@ -47,10 +62,19 @@ public class CharacterController : MonoBehaviour {
             {
                 delta = 0;
             }
+			striteTime += Time.deltaTime;
+			Debug.Log (striteTime);
+			if (striteTime > 0.5f) {
+				striteTime = 0;
+				sp.sprite = up [0];
+			} else {
+				sp.sprite = up [1];
+			}
+
             lastDirectionType = direction;
             float d = Time.deltaTime * speed; 
 			delta = delta + d;
-            Vector2 newPos = point.position;
+			Vector2 newPos = point.position;
 			switch (direction) {
 			case Direction.DOWN:
                     if (point.DownCross != null) {
